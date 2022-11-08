@@ -1,0 +1,1 @@
+For the most up-to-date OMPL version of FMT*, see https://github.com/ompl/ompl. The versions of RRT* and PRM* provided here provide additional utility functions over their OMPL-published counterparts (e.g. collision-check count).

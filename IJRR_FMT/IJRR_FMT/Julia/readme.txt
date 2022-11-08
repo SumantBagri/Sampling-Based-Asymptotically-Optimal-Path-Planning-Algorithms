@@ -1,0 +1,1 @@
+Contact schmrlng@stanford.edu for any questions/comments about this code; check https://github.com/StanfordASL/MotionPlanning.jl for a forthcoming refactored version of the codebase and for future updates.
