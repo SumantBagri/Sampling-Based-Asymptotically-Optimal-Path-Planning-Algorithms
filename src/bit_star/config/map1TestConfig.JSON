@@ -1,0 +1,19 @@
+{
+    "test_num": 25003,
+    "max_num_steps": 1000,
+    "batch_size": [
+        50,
+        0,
+        500
+    ],
+    "map_file": "../worlds/map_1.png",
+    "output_data_file": "../results/test.csv",
+    "start_state": [
+        58,
+        473
+    ],
+    "dest_state": [
+        532,
+        127
+    ]
+}
