@@ -23,14 +23,16 @@ if __name__ == "__main__":
     with open(sys.argv[1]) as config_file:
         config_data = json.load(config_file)
 
-    test_num = config_data['test_num']
+    overall_test_num = config_data['overall_test_num']
     max_num_steps = config_data['max_num_steps']
     # [starting batch size, batch size increment, max batch size]
     batch_size = config_data['batch_size']
     map_file = config_data['map_file']
     output_data_file = config_data['output_data_file']
+    final_vals_output_data_file = config_data['final_vals_output_data_file']
     start_state_config = config_data['start_state']
     dest_state_config = config_data['dest_state']
+    test_num = config_data['test_num']
 
     # Load the Map
     if map_file.lower().endswith('.pkl'):
@@ -48,8 +50,9 @@ if __name__ == "__main__":
     bit = BITPlanner(world)
 
     # Map ID
-    re_matches = re.findall('\w_(\d+)', map_file)
-    map_id = re_matches[len(re_matches)-1]
+    re_matches = re.findall('map_(\d+)_(\w+)[.png|.pkl|.jpg|.jpeg]', map_file)
+    map_id = re_matches[0][0]
+    map_type = re_matches[0][1]
 
     # Start State
     if (type(start_state_config) is list) and (len(start_state_config) == 2):
@@ -66,19 +69,25 @@ if __name__ == "__main__":
     if (type(dest_state_config) is list) and (len(dest_state_config) == 2):
         # Try to use given dest state
         dest_state = State(dest_state_config[0], dest_state_config[1], None)
-        if not (bit.state_is_free(dest_state)):
+        if (not (bit.state_is_free(dest_state))) or bit.path_is_obstacle_free(start_state, dest_state):
             # Sample
+            print(
+                "The provided Start and Goal States are not useable, sampling new destination state")
             dest_state = bit.sample_state()
+            while bit.path_is_obstacle_free(start_state, dest_state):
+                dest_state = bit.sample_state()
     else:
         # Sample
         dest_state = bit.sample_state()
+        while bit.path_is_obstacle_free(start_state, dest_state):
+            dest_state = bit.sample_state()
 
     # BIT* Algorithm
     plan = bit.plan(start_state,
                     dest_state,
                     max_num_steps,
                     batch_size,
-                    test_num)
+                    overall_test_num)
 
     cv2.destroyAllWindows()
 
@@ -95,10 +104,12 @@ if __name__ == "__main__":
     plt.show()
 
     data = {
-        'Test Number': [test_num for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
+        'Overall Test Number': [overall_test_num for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
+        'Map Type': [map_type for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Map Id': [map_id for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Start Point': [f"({start_state.x}, {start_state.y})" for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Goal Point': [f"({dest_state.x}, {dest_state.y})" for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
+        'Test Number': [test_num for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Iteration': [iter+1 for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Timestep': bit.current_time_ex_plotting_elapsed_arr,
         'Num Collision Checks': bit.num_collision_checks_arr,
@@ -114,8 +125,14 @@ if __name__ == "__main__":
         df.to_csv(f, mode='a', index=False, header=f.tell()
                   == 0, line_terminator='\n')
 
+    with open(final_vals_output_data_file, 'a') as f:
+        df.iloc[-1:].to_csv(f, mode='a', index=False, header=f.tell()
+                            == 0, line_terminator='\n')
+
     # Overwrite Config Data
     overwritten_config_data = config_data
+    overwritten_config_data['overall_test_num'] = int(
+        overwritten_config_data['overall_test_num']) + 1
     overwritten_config_data['test_num'] = int(
         overwritten_config_data['test_num']) + 1
     with open(sys.argv[1], 'w') as config_file:

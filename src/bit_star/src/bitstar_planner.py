@@ -37,7 +37,7 @@ class BITPlanner:
         Does collision detection. Returns true iff the state and its nearby
         surroundings are free.
         """
-        return (self.occ_grid[state.y-5:state.y+5, state.x-5:state.x+5] == 0).all()
+        return (self.occ_grid[state.y-1:state.y+1, state.x-1:state.x+1] == 0).all()
 
     def sample_state(self):
         """
@@ -92,7 +92,7 @@ class BITPlanner:
         """
 
         curr_ptr = state
-        path = [state]
+        path = [state]  # Change to [] ?
 
         while curr_ptr is not None:
             path.append(curr_ptr)
@@ -167,7 +167,7 @@ class BITPlanner:
         if not (self.state_is_free(s_to)):
             return False
 
-        max_checks = 200
+        max_checks = 50
         for i in range(max_checks):
             # TODO: check if the inteprolated state that is float(i)/max_checks * dist(s_from, s_new)
             # away on the line from s_from to s_new is free or not. If not free return False
@@ -302,7 +302,7 @@ class BITPlanner:
     def expand_top_vertex(self, Q_V, Q_E, X_samples, V, E, r, V_old, start_state, dest_state):
         start_time = time.time()
         priority_cost, state = heapq.heappop(Q_V)
-        print("r = ", r)
+        #print("r = ", r)
 
         # Explore the edges to the nearby sampled states (by adding them to the edge queue Q_E)
         X_near = [
@@ -485,7 +485,7 @@ class BITPlanner:
 
                         plot_time_start = time.time()
                         # plot the new node and edge
-                        cv2.circle(img, (x_m.x, x_m.y), 2, (0, 0, 255), 4)
+                        cv2.circle(img, (x_m.x, x_m.y), 2, (0, 0, 255), 2)
                         cv2.line(img, (v_m.x, v_m.y),
                                  (x_m.x, x_m.y), (255, 0, 0))
                         self.total_plotting_time = self.total_plotting_time + (
@@ -499,7 +499,7 @@ class BITPlanner:
             # Keep showing the image for a bit even
             # if we don't add a new node and edge
             plan = self._follow_parent_pointers(dest_state)
-            draw_plan(img, plan, bgr=(0, 0, 255), thickness=6,
+            draw_plan(img, plan, bgr=(0, 0, 255), thickness=2,
                       image_name="../results/bitstar_result_"+str(run_num)+".png")
             # cv2.imshow('image', img)
             # cv2.waitKey(10)
@@ -518,6 +518,11 @@ class BITPlanner:
             ) - start_time - self.total_plotting_time
             self.current_time_ex_plotting_elapsed_arr.append(
                 self.time_tracker["TotalExPlotting"])
+
+            # Perhaps make this less restrictive?
+            if dest_state.current_cost_to_come == dest_state.euclidean_distance(start_state):
+                print("Optimum Solution found")
+                break
 
         cv2.waitKey(0)
 

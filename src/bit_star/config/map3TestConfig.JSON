@@ -1,21 +1,15 @@
 {
-    "overall_test_num": 20001,
+    "overall_test_num": 23001,
     "max_num_steps": 1000,
     "batch_size": [
-        50,
+        30,
         0,
         500
     ],
-    "map_file": "../worlds/map_0_original.pkl",
+    "map_file": "../worlds/map_3_alternatinggaps.png",
     "output_data_file": "../results/test.csv",
     "final_vals_output_data_file": "../results/test_final_vals.csv",
-    "start_state": [
-        58,
-        473
-    ],
-    "dest_state": [
-        614,
-        193
-    ],
+    "start_state": "",
+    "dest_state": "",
     "test_num": 2
 }

@@ -1,0 +1,9 @@
+Update 1:
+
+- Added ability to handle cases where sampled/provided start and end states are obstacle free
+- Reduced max_checks for obstacle checking to 50 based on expected map size
+- Added additional column: map type
+- Changed test number column to "overall" test number
+- Added test number column, which is now a number specific to the map/start point/end point combination
+- Added additional CSV output with 1 row for each run (output of the final iteration of each algorithm)
+- Minor changes like the thickness of the drawn lines and circles

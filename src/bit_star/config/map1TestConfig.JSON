@@ -1,13 +1,14 @@
 {
-    "test_num": 25003,
+    "overall_test_num": 21002,
     "max_num_steps": 1000,
     "batch_size": [
         50,
         0,
         500
     ],
-    "map_file": "../worlds/map_1.png",
+    "map_file": "../worlds/map_1_internet.png",
     "output_data_file": "../results/test.csv",
+    "final_vals_output_data_file": "../results/test_final_vals.csv",
     "start_state": [
         58,
         473
@@ -15,5 +16,6 @@
     "dest_state": [
         532,
         127
-    ]
+    ],
+    "test_num": 3
 }
