@@ -1,0 +1,39 @@
+{
+    "max_num_steps": xxxx,
+    "fmt": {
+        "path_res": xxxx, // collision check for fmt
+        "col_dst": xxxx, // min dist from obstacle for fmt collision check
+        "batch_size": [some list],
+    },
+    "bit": {
+        "max_div": xxxx, // split for doing collision check (bit, nrrt)
+        "col_dst": xxxx, // min dist from obstacle for fmt collision check
+    },
+    "nrrt": {
+        "max_div": xxxx, // split for doing collision check (bit, nrrt)
+        "col_dst": xxxx, // min dist from obstacle for fmt collision check
+        "batch_size": [some list],
+    },
+    "maps": {
+        map0": {
+            "path" : "/path/to/map",
+            "s0" : {
+                "start" : [10, 10],
+                "target" : [140, 620]
+            },
+            "s1" : {
+                ...
+            },
+            "s2" : {
+                ...
+            },
+            "s3" : {
+                ...
+            },
+            "s4" : {
+                ...
+            }
+        },
+    ...{other maps}...
+    }
+}
