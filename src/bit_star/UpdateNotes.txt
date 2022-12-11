@@ -7,3 +7,10 @@ Update 1:
 - Added test number column, which is now a number specific to the map/start point/end point combination
 - Added additional CSV output with 1 row for each run (output of the final iteration of each algorithm)
 - Minor changes like the thickness of the drawn lines and circles
+
+Update 2:
+
+- Added ability to turn off graphs
+- Added ability do a bunch of runs together (experiment.py)
+- Added algorithm name column
+- Added rounded timesteps column (1 decimal place)

@@ -1,0 +1,4 @@
+Overall Test Number,Map Type,Map Id,Start Point,Goal Point,Test Number,Iteration,Timestep,Num Collision Checks,Batch Size,Cumulative Num Sampled,Current Path Cost,Any Path Found
+20000,alternatinggaps,1,"(225, 237)","(113, 186)",1,2000,3.8005270957946777,1987,30,420,123.10465822179667,True
+20050,alternatinggaps,2,"(84, 230)","(252, 161)",1,2000,1.67458176612854,1990,30,330,195.69813551909334,True
+20100,alternatinggaps,3,"(234, 77)","(91, 131)",1,2000,6.685096740722656,1997,30,120,276.5168168846022,True

@@ -1,5 +1,5 @@
 {
-    "overall_test_num": 20001,
+    "overall_test_num": 20008,
     "max_num_steps": 1000,
     "batch_size": [
         50,
@@ -17,5 +17,5 @@
         614,
         193
     ],
-    "test_num": 2
+    "test_num": 9
 }

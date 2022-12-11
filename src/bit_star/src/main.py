@@ -10,17 +10,26 @@ import json
 from bitstar_planner import BITPlanner
 from state import State
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
+
+def main(args):
+
+    if len(args) < 2:
         print("Usage: main.py config_file.JSON")
         sys.exit(1)
 
-    if not (sys.argv[1].lower().endswith('.json')):
+    if not (args[1].lower().endswith('.json')):
         print("Usage: Argument 1 must be a config file of .json type")
         sys.exit(1)
 
+    # Whether or not to show the planning algorithm
+    show_img = True
+    if len(args) == 3:
+        print(args[2].lower())
+        if args[2].lower() == "false":
+            show_img = False
+
     # Config Data
-    with open(sys.argv[1]) as config_file:
+    with open(args[1]) as config_file:
         config_data = json.load(config_file)
 
     overall_test_num = config_data['overall_test_num']
@@ -87,11 +96,13 @@ if __name__ == "__main__":
                     dest_state,
                     max_num_steps,
                     batch_size,
-                    overall_test_num)
+                    overall_test_num,
+                    show_img=show_img)
 
     cv2.destroyAllWindows()
 
     # Bar Plot of Time Spent on Each Operation
+    """
     sorted_time_tracker = sorted(zip(list(bit.time_tracker.values()), list(
         bit.time_tracker.keys())), reverse=True)
     sorted_time_vals = [vals for vals, keys in sorted_time_tracker]
@@ -102,9 +113,11 @@ if __name__ == "__main__":
     plt.ylabel("Time (s)")
     plt.title("Operation vs Time")
     plt.show()
+    """
 
     data = {
         'Overall Test Number': [overall_test_num for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
+        'Algorithm': ["BIT*" for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Map Type': [map_type for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Map Id': [map_id for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Start Point': [f"({start_state.x}, {start_state.y})" for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
@@ -121,6 +134,8 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(data)
 
+    df['Rounded Timestep'] = df['Timestep'].round(1)
+
     with open(output_data_file, 'a') as f:
         df.to_csv(f, mode='a', index=False, header=f.tell()
                   == 0, line_terminator='\n')
@@ -135,5 +150,10 @@ if __name__ == "__main__":
         overwritten_config_data['overall_test_num']) + 1
     overwritten_config_data['test_num'] = int(
         overwritten_config_data['test_num']) + 1
-    with open(sys.argv[1], 'w') as config_file:
+    with open(args[1], 'w') as config_file:
         json.dump(overwritten_config_data, config_file, indent=4)
+
+
+if __name__ == "__main__":
+
+    main(sys.argv)

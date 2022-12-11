@@ -27,7 +27,7 @@ def draw_plan(world, plan):
 """
 
 
-def draw_plan(world, plan, bgr=(255, 0, 0), thickness=1, image_name="image.png"):
+def draw_plan(world, plan, bgr=(255, 0, 0), thickness=1, image_name="image.png", show_img=True):
     img = np.copy(world)
     for t in range(len(plan)-1):
         pt0 = (int(plan[t].x), int(plan[t].y))
@@ -36,6 +36,7 @@ def draw_plan(world, plan, bgr=(255, 0, 0), thickness=1, image_name="image.png")
         cv2.line(img, pt0, pt1, bgr, thickness)
 
     cv2.imwrite(image_name, img)
-    cv2.imshow('image', img)
-    cv2.waitKey(10)
+    if show_img:
+        cv2.imshow('image', img)
+        cv2.waitKey(10)
     # cv2.destroyAllWindows()

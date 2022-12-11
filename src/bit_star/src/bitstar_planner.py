@@ -348,7 +348,7 @@ class BITPlanner:
         return
 
     # Algorithm 1
-    def plan(self, start_state, dest_state, max_num_steps, batch_size, run_num, eta=2):
+    def plan(self, start_state, dest_state, max_num_steps, batch_size, run_num, eta=2, show_img=True):
         """
         Returns a path as a sequence of states [start_state, ..., dest_state]
         if dest_state is reachable from start_state. Otherwise returns [start_state].
@@ -498,11 +498,11 @@ class BITPlanner:
             plot_time_start = time.time()
             # Keep showing the image for a bit even
             # if we don't add a new node and edge
-            plan = self._follow_parent_pointers(dest_state)
-            draw_plan(img, plan, bgr=(0, 0, 255), thickness=2,
-                      image_name="../results/bitstar_result_"+str(run_num)+".png")
-            # cv2.imshow('image', img)
-            # cv2.waitKey(10)
+            if show_img:
+                plan = self._follow_parent_pointers(dest_state)
+                draw_plan(img, plan, bgr=(0, 0, 255), thickness=2,
+                          image_name="../results/bitstar_result_"+str(run_num)+".png", show_img=show_img)
+
             self.total_plotting_time = self.total_plotting_time + \
                 (time.time() - plot_time_start)
 
@@ -524,6 +524,13 @@ class BITPlanner:
                 print("Optimum Solution found")
                 break
 
-        cv2.waitKey(0)
+        if show_img:
+            cv2.waitKey(0)
+
+        # Draw it now
+        if not show_img:
+            plan = self._follow_parent_pointers(dest_state)
+            draw_plan(img, plan, bgr=(0, 0, 255), thickness=2,
+                      image_name="../results/bitstar_result_"+str(run_num)+".png", show_img=show_img)
 
         return plan

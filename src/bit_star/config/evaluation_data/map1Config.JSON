@@ -1,0 +1,15 @@
+{
+    "overall_test_num": 20001,
+    "max_num_steps": 2000,
+    "batch_size": [
+        30,
+        0,
+        500
+    ],
+    "map_file": "../worlds/evaluation_data/map_1_alternatinggaps.png",
+    "output_data_file": "../results/evaluation_data/test.csv",
+    "final_vals_output_data_file": "../results/evaluation_data/test_final_vals.csv",
+    "start_state": "",
+    "dest_state": "",
+    "test_num": 2
+}

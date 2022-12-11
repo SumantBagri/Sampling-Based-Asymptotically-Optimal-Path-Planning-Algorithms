@@ -1,5 +1,5 @@
 {
-    "overall_test_num": 23001,
+    "overall_test_num": 23008,
     "max_num_steps": 1000,
     "batch_size": [
         30,
@@ -11,5 +11,5 @@
     "final_vals_output_data_file": "../results/test_final_vals.csv",
     "start_state": "",
     "dest_state": "",
-    "test_num": 2
+    "test_num": 9
 }
