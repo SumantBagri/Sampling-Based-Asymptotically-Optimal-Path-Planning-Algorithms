@@ -1,11 +1,11 @@
 import cv2
 import math
 import numpy as np
+import time
  
 from pqdict import pqdict
 from scipy.spatial import cKDTree
 from State import State
-from tqdm import tqdm
 from utils import draw_plan, compute_ndvol
 
 class FMTPlanner:
@@ -15,7 +15,7 @@ class FMTPlanner:
     def __init__(
         self,
         world: np.ndarray,
-        n_samples: int,
+        n_samples: int = 1000,
         max_iter: int = 10000,
         col_dst: np.float64 = 5.0,
         pr: np.float64 = 0.1,
@@ -38,6 +38,8 @@ class FMTPlanner:
         # Construct the obstacle tree for collision check
         self.obstacle_tree = cKDTree(np.argwhere(self.world == 1))
 
+        # Tracker for collision check calls
+        self.cc_calls = 0
         # Currently, only uniform random sampling is implemented
         prng = np.random.RandomState(0)
         self.node_list = list()
@@ -72,10 +74,12 @@ class FMTPlanner:
         # return a reverse copy of the path (so that first state is starting state)
         return path[::-1]
 
-    def _is_collision_free(self, s, t=None) -> bool:
+    def _is_collision_free(self, s, t=None, searching=False) -> bool:
         if t is None or np.all(s == t):
             return self.obstacle_tree.query(s.v)[0] > self.col_dst
-        
+        if searching:
+            self.cc_calls += 1
+
         ts_bar = t.v - s.v # d-dimensional 
         d = s.euclidean_distance(t)
         unit_ts_bar = ts_bar / d # d-dimensional unit-vector
@@ -83,11 +87,18 @@ class FMTPlanner:
         pts = s.v + steps * unit_ts_bar
         return bool(self.obstacle_tree.query(pts)[0].min() > self.col_dst)
     
+    def compute_cost(self, plan):
+        total_cost = 0.0
+        for idx in range(1, len(plan)):
+            total_cost += plan[idx].euclidean_distance(plan[idx-1])
+        return total_cost
+
     def plan(self,
              start: np.ndarray,
              target: np.ndarray,
              map_idx: int,
              pidx: int,
+             mode: str = 'test',
              hw: np.float64 = 0.0) -> dict:
         """
         Run path planning
@@ -100,6 +111,9 @@ class FMTPlanner:
         Returns:
             dict: Containing plan and number of steps required
         """
+        path_found = False
+        self.cc_calls = 0
+
         start = State(start)
         target = State(target)
         assert self._is_collision_free(start) and self._is_collision_free(target)
@@ -123,24 +137,29 @@ class FMTPlanner:
             # Plot start and target
             cv2.circle(img, (start.v[1], start.v[0]), 6, (65, 200, 245), -1)
             cv2.imshow('image', img)
-            cv2.waitKey(100)
+            # cv2.waitKey(100)
             cv2.circle(img, (target.v[1], target.v[0]), 6, (65, 245, 100), -1)
             cv2.imshow('image', img)
-            cv2.waitKey(100)
+            # cv2.waitKey(100)
             # Plot the sampled points
             for i in range(1,len(self.node_list)-1):
                 sample = self.node_list[i]
                 cv2.circle(img, (sample.v[1], sample.v[0]), 2, (245, 95, 65))
                 cv2.imshow('image', img)
-                cv2.waitKey(10)
+                # cv2.waitKey(1)
         plan = [start]
 
+        total_execution_time = 0.0
         # Begin
-        for step in tqdm(range(self.max_iter), leave=False):
+        for step in range(self.max_iter):
+            iter_stime = time.time()
             z = V_open.top()
             # check if we have reached the goal
             if z == target_id:
-                print("Path found!!")
+                # print("Path found!!")
+                path_found = True
+                iter_etime = time.time()
+                total_execution_time += (iter_etime - iter_stime)
                 # store plan
                 plan = self._follow_parent_pointers(self.node_list[z])
                 break
@@ -159,7 +178,7 @@ class FMTPlanner:
                 y_min = Y_near[np.argmin([V_open[y] for y in Y_near])]
                 # Do collision check only for y_min ("lazy collision-check")
                 if self._is_collision_free(self.node_list[x],
-                                           self.node_list[y_min]):
+                                           self.node_list[y_min], searching=True):
                     # Add y_min as parent of x and x as child of y_min -- adding an edge in the tree
                     self.node_list[x].parent = self.node_list[y_min]
                     self.node_list[y_min].children.append(self.node_list[x])
@@ -179,16 +198,26 @@ class FMTPlanner:
             V_closed.append(z)
             # Report failure if V_open is empty
             if len(V_open) == 0:
-                print("Path not found!")
+                # print("Path not found!")
+                iter_etime = time.time()
+                total_execution_time += (iter_etime - iter_stime)
                 break
+
+            iter_etime = time.time()
+            total_execution_time += (iter_etime - iter_stime)
             
             # Show the updated image
             cv2.imshow('image', img)
-            cv2.waitKey(10)
+            cv2.waitKey(1)
         
-        draw_plan(img, plan, map_idx, pidx, hw, bgr=(0,0,255), thickness=2)
+        draw_plan(img, plan, map_idx, pidx, hw, bgr=(0,0,255), thickness=2, mode=mode)
+
         return {
             'plan': plan,
-            'num_iters': step
+            'path_found': path_found,
+            'num_iters': step, # count
+            'total_execution_time': np.round(total_execution_time*100, decimals=2), # in ms
+            'collision_checks': self.cc_calls, # count
+            'cost': np.round(self.compute_cost(plan), decimals=2)
         }
 

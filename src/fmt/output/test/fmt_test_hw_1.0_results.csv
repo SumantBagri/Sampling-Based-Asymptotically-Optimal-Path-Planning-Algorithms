@@ -1,0 +1,4 @@
+Overall Test Number,Algorithm,Map Type,Map Id,Start Point,Goal Point,Test Number,Iteration,Timestep,Num Collision Checks,Batch Size,Cumulative Num Sampled,Current Path Cost,Any Path Found
+0,fmt,test,0,"[10, 10]","[140, 620]",0,78,15.73,275,1000,1000,652.9,True
+0,fmt,test,1,"[538, 60]","[60, 1130]",0,441,97.61,661,1000,1000,1635.57,True
+1,fmt,test,1,"[270, 120]","[538, 1130]",1,289,80.59,590,1000,1000,1260.21,True
