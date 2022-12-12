@@ -51,7 +51,7 @@ class CSVOperator:
         if self.rowcount > 1:
             return list(reader)[-1]
         
-        self.__close_fh
+        self.__close_fh()
 
     def writerow(self, row):
         if self.mode in ['r', None]:
