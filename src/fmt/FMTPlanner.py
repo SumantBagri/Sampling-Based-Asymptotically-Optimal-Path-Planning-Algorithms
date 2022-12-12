@@ -218,6 +218,6 @@ class FMTPlanner:
             'num_iters': step, # count
             'total_execution_time': np.round(total_execution_time*100, decimals=2), # in ms
             'collision_checks': self.cc_calls, # count
-            'cost': np.round(self.compute_cost(plan), decimals=2)
+            'cost': np.round(self.compute_cost(plan), decimals=2) if path_found else -1
         }
 
