@@ -98,6 +98,7 @@ class FMTPlanner:
              target: np.ndarray,
              map_idx: int,
              pidx: int,
+             sidx: int,
              mode: str = 'test',
              hw: np.float64 = 0.0,
              showlive: bool = False) -> dict:
@@ -208,7 +209,7 @@ class FMTPlanner:
                 cv2.imshow('image', img)
                 cv2.waitKey(1)
         
-        draw_plan(img, plan, map_idx, self.n, hw, bgr=(0,0,255), thickness=2, mode=mode)
+        draw_plan(img, plan, map_idx, sidx, self.n, hw, bgr=(0,0,255), thickness=2, mode=mode)
 
         return {
             'plan': plan,

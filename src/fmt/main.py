@@ -103,6 +103,7 @@ def evaluation():
                                                 target=tp,
                                                 map_idx=map_idx,
                                                 pidx=run_num,
+                                                sidx=st_pair_num,
                                                 mode="evaluation",
                                                 hw=hw)
                         data_dict["Iteration"] = plan_info['num_iters']

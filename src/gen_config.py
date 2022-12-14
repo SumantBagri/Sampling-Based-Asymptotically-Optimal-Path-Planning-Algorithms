@@ -28,7 +28,7 @@ config = {
     "fmt": {
         "path_res": 0.1, # collision check for fmt
         "heuristic_weights": [0.0, 1.0], # heuristic w eights for euclidean heuristics
-        "batch_size": [10, 50, 100, 300, 600, 1000, 2000],
+        "batch_size": [5, 10, 20, 40, 80, 100, 300, 600, 1000],
         "start_idx": 10000, # global starting index for fmt*
     },
     "bit": {
@@ -37,7 +37,7 @@ config = {
     },
     "nrrt": {
         "max_div": 200, # split for doing collision check (bit, nrrt)
-        "batch_size": [10, 50, 100, 300, 600, 1000, 2000],
+        "batch_size": [5, 10, 20, 40, 80, 100, 300, 600, 1000],
         "start_idx": 30000, # global starting index for nrrt*
         "steering_radius": 10 # steering radius for new node search
     },

@@ -41,7 +41,7 @@ def load_image(fname):
     else:
         raise FileFormatError(format)
 
-def draw_plan(world, plan, map_idx, n_samples, hw, bgr=(255,0,0), thickness=1, mode='test', showlive=False):
+def draw_plan(world, plan, map_idx, sidx, n_samples, hw, bgr=(255,0,0), thickness=1, mode='test', showlive=False):
     img = np.copy(world)
     for t in range(len(plan)-1):
         pt0 = (int(plan[t].v[1]), int(plan[t].v[0]))
@@ -53,7 +53,7 @@ def draw_plan(world, plan, map_idx, n_samples, hw, bgr=(255,0,0), thickness=1, m
         cv2.imshow('image', img)
         # cv2.waitKey(0)
         cv2.destroyAllWindows()
-    cv2.imwrite(f'output/{mode}/fmt_{mode}_result_{map_idx}_n_samples_{n_samples}_hw_{hw}.png', img)
+    cv2.imwrite(f'output/{mode}/fmt_{mode}_result_{map_idx}_state{sidx}_n_samples_{n_samples}_hw_{hw}.png', img)
 
 def compute_ndvol(R, d):
     return ((np.power((np.pi),d/2))/math.gamma((d/2)+1))*np.power(R,d)
