@@ -9,7 +9,8 @@ if __name__ == "__main__":
     batch_sizes = [[10, 0, 100], [10, 20, 100], [10, 30, 200], [30, 0, 100], [
         30, 50, 200], [30, 100, 300], [50, 0, 100], [50, 50, 200], [50, 100, 400], [30, 10, 100]]
 
-    i = 25
+    i = 26
+    i = i-1
     # 5 Combinations of start/goal states
     for j in range(0, 2):
         config_file_path = configs_path + f"map{i}Config{j}.JSON"

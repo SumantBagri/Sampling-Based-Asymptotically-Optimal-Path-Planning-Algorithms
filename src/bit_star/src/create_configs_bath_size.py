@@ -9,8 +9,8 @@ start_idx = config_data['bit']['start_idx']
 maps_config_data = config_data['maps']
 
 batch_size = ""
-output_data_file = "../results/evaluation_data_batch_size/test.csv"
-final_vals_output_data_file = "../results/evaluation_data_batch_size/test_final_vals.csv"
+output_data_file = "../results/evaluation_data_batch_sizes/test.csv"
+final_vals_output_data_file = "../results/evaluation_data_batch_sizes/test_final_vals.csv"
 output_config_files_path = "../config/evaluation_data_batch_size/"
 
 

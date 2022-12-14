@@ -1,5 +1,6 @@
 from main import main
 import json
+import numpy as np
 
 
 if __name__ == "__main__":
@@ -11,6 +12,7 @@ if __name__ == "__main__":
         main_config_data = json.load(main_config_file)
 
     map_idxs = main_config_data["map_idxs"]
+    map_idxs = np.subtract(map_idxs, 1)
 
     # Maps
     for i in map_idxs:

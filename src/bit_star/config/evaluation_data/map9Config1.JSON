@@ -1,1 +1,21 @@
-{"max_num_steps": 2000, "batch_size": [30, 0, 500], "output_data_file": "../results/evaluation_data/test.csv", "final_vals_output_data_file": "../results/evaluation_data/test_final_vals.csv", "map_file": "../Maps/evaluation_data/map_10_bugtrapforest.png", "start_state": [232, 157], "dest_state": [5, 10], "overall_test_num": 20950, "test_num": 1}
+{
+    "max_num_steps": 2000,
+    "batch_size": [
+        30,
+        0,
+        500
+    ],
+    "output_data_file": "../results/evaluation_data/test.csv",
+    "final_vals_output_data_file": "../results/evaluation_data/test_final_vals.csv",
+    "map_file": "../Maps/evaluation_data/map_10_bugtrapforest.png",
+    "start_state": [
+        210,
+        23
+    ],
+    "dest_state": [
+        29,
+        224
+    ],
+    "overall_test_num": 20955,
+    "test_num": 6
+}

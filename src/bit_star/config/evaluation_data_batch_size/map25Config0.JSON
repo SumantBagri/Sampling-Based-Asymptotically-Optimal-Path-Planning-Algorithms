@@ -9,13 +9,13 @@
     "final_vals_output_data_file": "../results/evaluation_data_batch_sizes/test_final_vals.csv",
     "map_file": "../Maps/evaluation_data/map_26_multibugtrap.png",
     "start_state": [
-        178,
-        212
+        182,
+        53
     ],
     "dest_state": [
-        63,
-        73
+        161,
+        232
     ],
-    "overall_test_num": 200100,
-    "test_num": 101
+    "overall_test_num": 200050,
+    "test_num": 51
 }
