@@ -72,7 +72,8 @@ def evaluation():
         CSVOperator.clear()
         write_idx = cfg["fmt"]["start_idx"]
         for n_samples in tqdm(cfg["fmt"]["batch_size"], position=1, leave=False):
-            for _, map_dict in tqdm(cfg["maps"].items(), position=2, leave=False):
+            for map_idx in tqdm(cfg["map_idxs"], position=2, leave=False):
+                map_dict = cfg["maps"][f"map{map_idx-1}"]
                 p = map_dict["path"]
                 splits = p.split(".")[-2].split("_")
                 map_idx = splits[-2]

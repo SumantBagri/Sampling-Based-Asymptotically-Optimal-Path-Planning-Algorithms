@@ -137,17 +137,13 @@ class FMTPlanner:
         if self.d == 2: 
             # Plot start and target
             cv2.circle(img, (start.v[1], start.v[0]), 6, (65, 200, 245), -1)
-            cv2.imshow('image', img)
-            # cv2.waitKey(100)
             cv2.circle(img, (target.v[1], target.v[0]), 6, (65, 245, 100), -1)
-            cv2.imshow('image', img)
-            # cv2.waitKey(100)
             # Plot the sampled points
             for i in range(1,len(self.node_list)-1):
                 sample = self.node_list[i]
                 cv2.circle(img, (sample.v[1], sample.v[0]), 2, (245, 95, 65))
+            if (showlive):
                 cv2.imshow('image', img)
-                # cv2.waitKey(1)
         plan = [start]
 
         total_execution_time = 0.0
