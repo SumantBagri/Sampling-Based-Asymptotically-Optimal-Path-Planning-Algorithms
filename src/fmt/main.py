@@ -85,7 +85,8 @@ def evaluation():
                                             n_samples=n_samples, # change for sample-based analysis,
                                             max_iter=cfg["max_num_steps"],
                                             col_dst=cfg["col_dst"],
-                                            pr=cfg["fmt"]["path_res"])
+                                            pr=cfg["fmt"]["path_res"],
+                                            seed=cfg["rng_seeds"][run_num])
                         data_dict = {
                             'Overall Test Number': f"{write_idx}",
                             'Algorithm': 'fmt',

@@ -19,7 +19,7 @@ class FMTPlanner:
         max_iter: int = 10000,
         col_dst: np.float64 = 5.0,
         pr: np.float64 = 0.1,
-        sampling: str = 'uniform') -> None:
+        seed: int = 0) -> None:
         
         # RGB world is N-D with 3 channels for R, G and B
         self.rgbworld = world
@@ -41,7 +41,7 @@ class FMTPlanner:
         # Tracker for collision check calls
         self.cc_calls = 0
         # Currently, only uniform random sampling is implemented
-        prng = np.random.RandomState(0)
+        prng = np.random.RandomState(seed)
         self.node_list = list()
         while len(self.node_list) < self.n:
             # sample a d-dimensional State from a uniform distribution
@@ -99,7 +99,8 @@ class FMTPlanner:
              map_idx: int,
              pidx: int,
              mode: str = 'test',
-             hw: np.float64 = 0.0) -> dict:
+             hw: np.float64 = 0.0,
+             showlive: bool = False) -> dict:
         """
         Run path planning
 
@@ -206,9 +207,10 @@ class FMTPlanner:
             iter_etime = time.time()
             total_execution_time += (iter_etime - iter_stime)
             
-            # Show the updated image
-            cv2.imshow('image', img)
-            cv2.waitKey(1)
+            if (showlive):
+                # Show the updated image
+                cv2.imshow('image', img)
+                cv2.waitKey(1)
         
         draw_plan(img, plan, map_idx, self.n, hw, bgr=(0,0,255), thickness=2, mode=mode)
 
