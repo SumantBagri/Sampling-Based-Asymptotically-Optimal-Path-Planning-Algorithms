@@ -1,4 +1,5 @@
 from main import main
+import json
 
 
 if __name__ == "__main__":
@@ -6,12 +7,20 @@ if __name__ == "__main__":
     args_template = ['main.py']
     configs_path = "../config/evaluation_data/"
 
-    for i in range(1, 4):
-        # Do 5 runs of each
+    with open("../config/config.json") as main_config_file:
+        main_config_data = json.load(main_config_file)
 
-        config_file_path = configs_path + f"map{i}Config.JSON"
-        args = args_template.copy()
-        args.append(config_file_path)
-        args.append("False")
+    map_idxs = main_config_data["map_idxs"]
 
-        main(args)
+    # Maps
+    for i in map_idxs:
+        # 2 Combinations of start/goal states
+        for j in range(0, 2):
+            config_file_path = configs_path + f"map{i}Config{j}.JSON"
+            args = args_template.copy()
+            args.append(config_file_path)
+            args.append("False")
+            args.append("../results/evaluation_data/images/")
+            # 5 Runs of each
+            for k in range(0, 5):
+                main(args)

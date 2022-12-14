@@ -1,0 +1,984 @@
+{
+    "rng_seeds": [
+        683,
+        35,
+        454,
+        576,
+        122
+    ],
+    "max_num_steps": 2000,
+    "map_idxs": [
+        2,
+        10,
+        13,
+        19,
+        24,
+        28,
+        37
+    ],
+    "state_pair_per_map": 2,
+    "runs_per_map": 5,
+    "separation_factor": [
+        0.5,
+        0.75
+    ],
+    "neighbour_eps": 0.1,
+    "col_dst": 1,
+    "fmt": {
+        "path_res": 0.1,
+        "heuristic_weights": [
+            0,
+            1
+        ],
+        "batch_size": [
+            10,
+            50,
+            100,
+            300,
+            600,
+            1000,
+            2000
+        ],
+        "start_idx": 10000
+    },
+    "bit": {
+        "max_div": 50,
+        "start_idx": 20000
+    },
+    "nrrt": {
+        "max_div": 200,
+        "batch_size": [
+            10,
+            50,
+            100,
+            300,
+            600,
+            1000,
+            2000
+        ],
+        "start_idx": 30000,
+        "steering_radius": 10
+    },
+    "maps": {
+        "map0": {
+            "path": "../Maps/evaluation_data/map_01_alternatinggaps.png",
+            "s0": {
+                "start": [
+                    229,
+                    220
+                ],
+                "target": [
+                    154,
+                    56
+                ]
+            },
+            "s1": {
+                "start": [
+                    235,
+                    20
+                ],
+                "target": [
+                    20,
+                    184
+                ]
+            }
+        },
+        "map1": {
+            "path": "../Maps/evaluation_data/map_02_alternatinggaps.png",
+            "s0": {
+                "start": [
+                    236,
+                    70
+                ],
+                "target": [
+                    105,
+                    194
+                ]
+            },
+            "s1": {
+                "start": [
+                    42,
+                    56
+                ],
+                "target": [
+                    243,
+                    237
+                ]
+            }
+        },
+        "map2": {
+            "path": "../Maps/evaluation_data/map_03_alternatinggaps.png",
+            "s0": {
+                "start": [
+                    227,
+                    63
+                ],
+                "target": [
+                    216,
+                    243
+                ]
+            },
+            "s1": {
+                "start": [
+                    214,
+                    188
+                ],
+                "target": [
+                    13,
+                    7
+                ]
+            }
+        },
+        "map3": {
+            "path": "../Maps/evaluation_data/map_04_alternatinggaps.png",
+            "s0": {
+                "start": [
+                    177,
+                    73
+                ],
+                "target": [
+                    138,
+                    249
+                ]
+            },
+            "s1": {
+                "start": [
+                    235,
+                    11
+                ],
+                "target": [
+                    96,
+                    243
+                ]
+            }
+        },
+        "map4": {
+            "path": "../Maps/evaluation_data/map_05_alternatinggaps.png",
+            "s0": {
+                "start": [
+                    203,
+                    219
+                ],
+                "target": [
+                    79,
+                    88
+                ]
+            },
+            "s1": {
+                "start": [
+                    6,
+                    180
+                ],
+                "target": [
+                    248,
+                    59
+                ]
+            }
+        },
+        "map5": {
+            "path": "../Maps/evaluation_data/map_06_bugtrapforest.png",
+            "s0": {
+                "start": [
+                    243,
+                    10
+                ],
+                "target": [
+                    63,
+                    21
+                ]
+            },
+            "s1": {
+                "start": [
+                    27,
+                    239
+                ],
+                "target": [
+                    183,
+                    18
+                ]
+            }
+        },
+        "map6": {
+            "path": "../Maps/evaluation_data/map_07_bugtrapforest.png",
+            "s0": {
+                "start": [
+                    48,
+                    21
+                ],
+                "target": [
+                    95,
+                    195
+                ]
+            },
+            "s1": {
+                "start": [
+                    195,
+                    227
+                ],
+                "target": [
+                    35,
+                    9
+                ]
+            }
+        },
+        "map7": {
+            "path": "../Maps/evaluation_data/map_08_bugtrapforest.png",
+            "s0": {
+                "start": [
+                    30,
+                    214
+                ],
+                "target": [
+                    193,
+                    137
+                ]
+            },
+            "s1": {
+                "start": [
+                    189,
+                    6
+                ],
+                "target": [
+                    25,
+                    221
+                ]
+            }
+        },
+        "map8": {
+            "path": "../Maps/evaluation_data/map_09_bugtrapforest.png",
+            "s0": {
+                "start": [
+                    226,
+                    157
+                ],
+                "target": [
+                    84,
+                    46
+                ]
+            },
+            "s1": {
+                "start": [
+                    76,
+                    225
+                ],
+                "target": [
+                    236,
+                    7
+                ]
+            }
+        },
+        "map9": {
+            "path": "../Maps/evaluation_data/map_10_bugtrapforest.png",
+            "s0": {
+                "start": [
+                    41,
+                    36
+                ],
+                "target": [
+                    200,
+                    121
+                ]
+            },
+            "s1": {
+                "start": [
+                    157,
+                    232
+                ],
+                "target": [
+                    10,
+                    5
+                ]
+            }
+        },
+        "map10": {
+            "path": "../Maps/evaluation_data/map_11_forest.png",
+            "s0": {
+                "start": [
+                    208,
+                    141
+                ],
+                "target": [
+                    30,
+                    170
+                ]
+            },
+            "s1": {
+                "start": [
+                    57,
+                    217
+                ],
+                "target": [
+                    239,
+                    17
+                ]
+            }
+        },
+        "map11": {
+            "path": "../Maps/evaluation_data/map_12_forest.png",
+            "s0": {
+                "start": [
+                    197,
+                    69
+                ],
+                "target": [
+                    25,
+                    15
+                ]
+            },
+            "s1": {
+                "start": [
+                    235,
+                    238
+                ],
+                "target": [
+                    17,
+                    78
+                ]
+            }
+        },
+        "map12": {
+            "path": "../Maps/evaluation_data/map_13_forest.png",
+            "s0": {
+                "start": [
+                    125,
+                    73
+                ],
+                "target": [
+                    78,
+                    247
+                ]
+            },
+            "s1": {
+                "start": [
+                    240,
+                    73
+                ],
+                "target": [
+                    22,
+                    233
+                ]
+            }
+        },
+        "map13": {
+            "path": "../Maps/evaluation_data/map_14_forest.png",
+            "s0": {
+                "start": [
+                    53,
+                    206
+                ],
+                "target": [
+                    44,
+                    26
+                ]
+            },
+            "s1": {
+                "start": [
+                    16,
+                    72
+                ],
+                "target": [
+                    241,
+                    222
+                ]
+            }
+        },
+        "map14": {
+            "path": "../Maps/evaluation_data/map_15_forest.png",
+            "s0": {
+                "start": [
+                    72,
+                    142
+                ],
+                "target": [
+                    199,
+                    14
+                ]
+            },
+            "s1": {
+                "start": [
+                    12,
+                    70
+                ],
+                "target": [
+                    233,
+                    226
+                ]
+            }
+        },
+        "map15": {
+            "path": "../Maps/evaluation_data/map_16_gapsforest.png",
+            "s0": {
+                "start": [
+                    232,
+                    110
+                ],
+                "target": [
+                    52,
+                    120
+                ]
+            },
+            "s1": {
+                "start": [
+                    66,
+                    209
+                ],
+                "target": [
+                    247,
+                    8
+                ]
+            }
+        },
+        "map16": {
+            "path": "../Maps/evaluation_data/map_17_gapsforest.png",
+            "s0": {
+                "start": [
+                    240,
+                    102
+                ],
+                "target": [
+                    62,
+                    73
+                ]
+            },
+            "s1": {
+                "start": [
+                    237,
+                    240
+                ],
+                "target": [
+                    77,
+                    22
+                ]
+            }
+        },
+        "map17": {
+            "path": "../Maps/evaluation_data/map_18_gapsforest.png",
+            "s0": {
+                "start": [
+                    113,
+                    39
+                ],
+                "target": [
+                    224,
+                    181
+                ]
+            },
+            "s1": {
+                "start": [
+                    214,
+                    40
+                ],
+                "target": [
+                    32,
+                    240
+                ]
+            }
+        },
+        "map18": {
+            "path": "../Maps/evaluation_data/map_19_gapsforest.png",
+            "s0": {
+                "start": [
+                    231,
+                    222
+                ],
+                "target": [
+                    240,
+                    42
+                ]
+            },
+            "s1": {
+                "start": [
+                    208,
+                    185
+                ],
+                "target": [
+                    6,
+                    5
+                ]
+            }
+        },
+        "map19": {
+            "path": "../Maps/evaluation_data/map_20_gapsforest.png",
+            "s0": {
+                "start": [
+                    221,
+                    216
+                ],
+                "target": [
+                    146,
+                    52
+                ]
+            },
+            "s1": {
+                "start": [
+                    236,
+                    238
+                ],
+                "target": [
+                    28,
+                    65
+                ]
+            }
+        },
+        "map20": {
+            "path": "../Maps/evaluation_data/map_21_maze.png",
+            "s0": {
+                "start": [
+                    84,
+                    183
+                ],
+                "target": [
+                    163,
+                    21
+                ]
+            },
+            "s1": {
+                "start": [
+                    229,
+                    45
+                ],
+                "target": [
+                    8,
+                    201
+                ]
+            }
+        },
+        "map21": {
+            "path": "../Maps/evaluation_data/map_22_maze.png",
+            "s0": {
+                "start": [
+                    148,
+                    216
+                ],
+                "target": [
+                    233,
+                    57
+                ]
+            },
+            "s1": {
+                "start": [
+                    5,
+                    227
+                ],
+                "target": [
+                    230,
+                    77
+                ]
+            }
+        },
+        "map22": {
+            "path": "../Maps/evaluation_data/map_23_maze.png",
+            "s0": {
+                "start": [
+                    49,
+                    178
+                ],
+                "target": [
+                    164,
+                    39
+                ]
+            },
+            "s1": {
+                "start": [
+                    13,
+                    214
+                ],
+                "target": [
+                    236,
+                    61
+                ]
+            }
+        },
+        "map23": {
+            "path": "../Maps/evaluation_data/map_24_maze.png",
+            "s0": {
+                "start": [
+                    113,
+                    151
+                ],
+                "target": [
+                    224,
+                    9
+                ]
+            },
+            "s1": {
+                "start": [
+                    26,
+                    218
+                ],
+                "target": [
+                    228,
+                    38
+                ]
+            }
+        },
+        "map24": {
+            "path": "../Maps/evaluation_data/map_25_maze.png",
+            "s0": {
+                "start": [
+                    56,
+                    75
+                ],
+                "target": [
+                    172,
+                    213
+                ]
+            },
+            "s1": {
+                "start": [
+                    27,
+                    212
+                ],
+                "target": [
+                    234,
+                    38
+                ]
+            }
+        },
+        "map25": {
+            "path": "../Maps/evaluation_data/map_26_multibugtrap.png",
+            "s0": {
+                "start": [
+                    212,
+                    178
+                ],
+                "target": [
+                    73,
+                    63
+                ]
+            },
+            "s1": {
+                "start": [
+                    11,
+                    232
+                ],
+                "target": [
+                    236,
+                    82
+                ]
+            }
+        },
+        "map26": {
+            "path": "../Maps/evaluation_data/map_27_multibugtrap.png",
+            "s0": {
+                "start": [
+                    224,
+                    233
+                ],
+                "target": [
+                    177,
+                    59
+                ]
+            },
+            "s1": {
+                "start": [
+                    17,
+                    6
+                ],
+                "target": [
+                    229,
+                    174
+                ]
+            }
+        },
+        "map27": {
+            "path": "../Maps/evaluation_data/map_28_multibugtrap.png",
+            "s0": {
+                "start": [
+                    188,
+                    201
+                ],
+                "target": [
+                    8,
+                    210
+                ]
+            },
+            "s1": {
+                "start": [
+                    28,
+                    52
+                ],
+                "target": [
+                    249,
+                    208
+                ]
+            }
+        },
+        "map28": {
+            "path": "../Maps/evaluation_data/map_29_multibugtrap.png",
+            "s0": {
+                "start": [
+                    77,
+                    39
+                ],
+                "target": [
+                    87,
+                    219
+                ]
+            },
+            "s1": {
+                "start": [
+                    17,
+                    41
+                ],
+                "target": [
+                    246,
+                    185
+                ]
+            }
+        },
+        "map29": {
+            "path": "../Maps/evaluation_data/map_30_multibugtrap.png",
+            "s0": {
+                "start": [
+                    41,
+                    223
+                ],
+                "target": [
+                    144,
+                    75
+                ]
+            },
+            "s1": {
+                "start": [
+                    34,
+                    15
+                ],
+                "target": [
+                    173,
+                    247
+                ]
+            }
+        },
+        "map30": {
+            "path": "../Maps/evaluation_data/map_31_shiftinggaps.png",
+            "s0": {
+                "start": [
+                    217,
+                    33
+                ],
+                "target": [
+                    160,
+                    204
+                ]
+            },
+            "s1": {
+                "start": [
+                    237,
+                    225
+                ],
+                "target": [
+                    37,
+                    43
+                ]
+            }
+        },
+        "map31": {
+            "path": "../Maps/evaluation_data/map_32_shiftinggaps.png",
+            "s0": {
+                "start": [
+                    71,
+                    86
+                ],
+                "target": [
+                    232,
+                    5
+                ]
+            },
+            "s1": {
+                "start": [
+                    228,
+                    233
+                ],
+                "target": [
+                    54,
+                    26
+                ]
+            }
+        },
+        "map32": {
+            "path": "../Maps/evaluation_data/map_33_shiftinggaps.png",
+            "s0": {
+                "start": [
+                    189,
+                    24
+                ],
+                "target": [
+                    223,
+                    201
+                ]
+            },
+            "s1": {
+                "start": [
+                    24,
+                    236
+                ],
+                "target": [
+                    224,
+                    54
+                ]
+            }
+        },
+        "map33": {
+            "path": "../Maps/evaluation_data/map_34_shiftinggaps.png",
+            "s0": {
+                "start": [
+                    101,
+                    59
+                ],
+                "target": [
+                    20,
+                    220
+                ]
+            },
+            "s1": {
+                "start": [
+                    47,
+                    203
+                ],
+                "target": [
+                    248,
+                    22
+                ]
+            }
+        },
+        "map34": {
+            "path": "../Maps/evaluation_data/map_35_shiftinggaps.png",
+            "s0": {
+                "start": [
+                    221,
+                    65
+                ],
+                "target": [
+                    110,
+                    207
+                ]
+            },
+            "s1": {
+                "start": [
+                    248,
+                    27
+                ],
+                "target": [
+                    66,
+                    227
+                ]
+            }
+        },
+        "map35": {
+            "path": "../Maps/evaluation_data/map_36_bugtrap.png",
+            "s0": {
+                "start": [
+                    235,
+                    165
+                ],
+                "target": [
+                    57,
+                    194
+                ]
+            },
+            "s1": {
+                "start": [
+                    5,
+                    172
+                ],
+                "target": [
+                    230,
+                    22
+                ]
+            }
+        },
+        "map36": {
+            "path": "../Maps/evaluation_data/map_37_bugtrap.png",
+            "s0": {
+                "start": [
+                    51,
+                    209
+                ],
+                "target": [
+                    12,
+                    33
+                ]
+            },
+            "s1": {
+                "start": [
+                    9,
+                    217
+                ],
+                "target": [
+                    191,
+                    17
+                ]
+            }
+        },
+        "map37": {
+            "path": "../Maps/evaluation_data/map_38_bugtrap.png",
+            "s0": {
+                "start": [
+                    68,
+                    35
+                ],
+                "target": [
+                    247,
+                    56
+                ]
+            },
+            "s1": {
+                "start": [
+                    71,
+                    25
+                ],
+                "target": [
+                    239,
+                    237
+                ]
+            }
+        },
+        "map38": {
+            "path": "../Maps/evaluation_data/map_39_bugtrap.png",
+            "s0": {
+                "start": [
+                    35,
+                    225
+                ],
+                "target": [
+                    199,
+                    150
+                ]
+            },
+            "s1": {
+                "start": [
+                    246,
+                    56
+                ],
+                "target": [
+                    28,
+                    216
+                ]
+            }
+        },
+        "map39": {
+            "path": "../Maps/evaluation_data/map_40_bugtrap.png",
+            "s0": {
+                "start": [
+                    123,
+                    6
+                ],
+                "target": [
+                    44,
+                    168
+                ]
+            },
+            "s1": {
+                "start": [
+                    200,
+                    23
+                ],
+                "target": [
+                    20,
+                    225
+                ]
+            }
+        }
+    }
+}

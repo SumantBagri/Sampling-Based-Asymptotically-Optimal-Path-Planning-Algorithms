@@ -23,10 +23,14 @@ def main(args):
 
     # Whether or not to show the planning algorithm
     show_img = True
-    if len(args) == 3:
-        print(args[2].lower())
+    if len(args) >= 3:
         if args[2].lower() == "false":
             show_img = False
+
+    # Path for output images of the planned path
+    imgs_path = "../results/images/"
+    if len(args) == 4:
+        imgs_path = args[3]
 
     # Config Data
     with open(args[1]) as config_file:
@@ -67,9 +71,11 @@ def main(args):
     if (type(start_state_config) is list) and (len(start_state_config) == 2):
         # Try to use given start state
         start_state = State(start_state_config[0], start_state_config[1], None)
+        """
         if not (bit.state_is_free(start_state)):
             # Sample
             start_state = bit.sample_state()
+        """
     else:
         # Sample
         start_state = bit.sample_state()
@@ -78,6 +84,7 @@ def main(args):
     if (type(dest_state_config) is list) and (len(dest_state_config) == 2):
         # Try to use given dest state
         dest_state = State(dest_state_config[0], dest_state_config[1], None)
+        """
         if (not (bit.state_is_free(dest_state))) or bit.path_is_obstacle_free(start_state, dest_state):
             # Sample
             print(
@@ -85,6 +92,7 @@ def main(args):
             dest_state = bit.sample_state()
             while bit.path_is_obstacle_free(start_state, dest_state):
                 dest_state = bit.sample_state()
+        """
     else:
         # Sample
         dest_state = bit.sample_state()
@@ -97,6 +105,7 @@ def main(args):
                     max_num_steps,
                     batch_size,
                     overall_test_num,
+                    imgs_path,
                     show_img=show_img)
 
     cv2.destroyAllWindows()
@@ -126,7 +135,8 @@ def main(args):
         'Iteration': [iter+1 for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Timestep': bit.current_time_ex_plotting_elapsed_arr,
         'Num Collision Checks': bit.num_collision_checks_arr,
-        'Batch Size': bit.batch_size_arr,
+        'Batch Size': [batch_size for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
+        'Current Batch Size': bit.batch_size_arr,
         'Cumulative Num Sampled': bit.cumulative_sampled_arr,
         'Current Path Cost': bit.current_path_cost_arr,
         'Any Path Found': bit.any_path_found_arr,
