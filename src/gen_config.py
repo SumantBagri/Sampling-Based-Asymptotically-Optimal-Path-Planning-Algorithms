@@ -9,15 +9,21 @@ from fmt.utils import load_image
 MAPS_DIR = "../Maps/evaluation_data"
 CONFIG_DIR = "config"
 
-STATE_PAIR_PER_MAP = 1
+# Map idex for: alternating gaps, bugtrapforest, forest, gapsforest, maze, multibugtrap, bugtrap
+MAP_IDXS = [2, 10, 13, 19, 24, 28, 37]
 RUNS_PER_MAP = 5
-SEPARATION_FACTOR = 0.75
+SEPARATION_FACTORS = [0.5, 0.75]
+STATE_PAIR_PER_MAP = len(SEPARATION_FACTORS)
+NEIGHBOUR_EPS = 0.1
 
 config = {
+    "rng_seeds" : np.random.randint(999, size=RUNS_PER_MAP), # seed for sampling
     "max_num_steps": 2000, # maximum number of exploration steps for a single run before giving up
+    "map_idxs": MAP_IDXS, # map indexes to be used for simulations
     "state_pair_per_map": STATE_PAIR_PER_MAP, # number of start-end pairs for each map
     "runs_per_map": RUNS_PER_MAP, # number of runs per map
-    "separation_factor": SEPARATION_FACTOR, # minimum distance between start-end states for each map
+    "separation_factor": SEPARATION_FACTORS, # minimum distance between start-end states for each map
+    "neighbour_eps": NEIGHBOUR_EPS, # epsilon neighbourhood for finding start-end state pair for each map
     "col_dst": 1.0, # min dist from obstacle for collision check
     "fmt": {
         "path_res": 0.1, # collision check for fmt
@@ -82,7 +88,8 @@ def main():
             s, t = np.random.randint(free_world.shape[0], size=2)
             start = list(free_world[s])
             target = list(free_world[t])
-            if is_free(start, world) and is_free(target, world) and ed(start, target) >= SEPARATION_FACTOR*diag:
+            dist = ed(start, target)
+            if is_free(start, world) and is_free(target, world) and dist > SEPARATION_FACTORS[run]*diag - NEIGHBOUR_EPS and dist < SEPARATION_FACTORS[run]*diag + NEIGHBOUR_EPS:
                 config["maps"][f"map{i}"][f"s{run}"] = {"start": start, "target": target}
                 run += 1
 
