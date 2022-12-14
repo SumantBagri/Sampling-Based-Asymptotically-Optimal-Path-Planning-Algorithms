@@ -186,11 +186,14 @@ class FMTPlanner:
                     V_open.additem(x, c_x)
                     V_unvisited.remove(x)
 
+                    iter_etime = time.time()
+                    total_execution_time += (iter_etime - iter_stime)
                     # Update image with the newly added edge
                     cv2.line(img, (self.node_list[y_min].v[1], self.node_list[y_min].v[0]),
                                 (self.node_list[x].v[1], self.node_list[x].v[0]),
                                 (255,0,0)
-                    )
+                            )
+                    iter_stime = time.time()
             # Move z from V_open to V_closed
             V_open.pop(z)
             V_closed.append(z)
@@ -209,7 +212,7 @@ class FMTPlanner:
                 cv2.imshow('image', img)
                 cv2.waitKey(1)
         
-        draw_plan(img, plan, map_idx, sidx, self.n, hw, bgr=(0,0,255), thickness=2, mode=mode)
+        draw_plan(img, plan, map_idx, sidx, self.n, pidx, hw, bgr=(0,0,255), thickness=2, mode=mode)
 
         return {
             'plan': plan,
