@@ -43,15 +43,19 @@ class CSVOperator:
             self.mode = 'r'
             self.fh = open(self.fpath, mode=self.mode)
 
-        reader = csv.reader(self.fh)
-        self.rowcount = len(list(reader))
-        if store:
-            self.data = list(reader)
-        
+        lr = None
+        data = list(csv.reader(self.fh))
+        self.rowcount = len(data)
+
         if self.rowcount > 1:
-            return list(reader)[-1]
+            if store:
+                self.data = data
+            lr = data[-1]
+        else:
+            print(f"File at ({self.fpath}) is empty!")
         
         self.__close_fh()
+        return lr
 
     def writerow(self, row):
         if self.mode in ['r', None]:
