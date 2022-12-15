@@ -51,7 +51,7 @@ class NRRTPlanner:
         '''
             Collision check for state with self.clearance
         '''
-        return (self.img[state.y-self.clearance:state.y+self.clearance, state.x-self.clearance:state.x+self.clearance] == 0).all()
+        return (self.img[state.x-self.clearance:state.x+self.clearance, state.y-self.clearance:state.y+self.clearance] == 0).all()
     
     def convert_img(self, start, end):
         '''
@@ -250,7 +250,45 @@ class NRRTPlanner:
                 return False
         
         return True
-    
+        def new_cost(self, from_node, to_node):
+        dist = from_node.euclidean_distance(to_node)
+        return from_node.cost + dist
+
+    def choose_parent(self, new_node, n_nodes, p_node):
+        min_cost = np.inf
+        best_node = None
+
+        for node in n_nodes:
+            new_cost = np.inf if not self.path_is_obstacle_free(node, new_node) else self.new_cost(node, new_node)
+            
+            # update best candidate
+            if min_cost > new_cost:
+                min_cost = new_cost
+                best_node = node
+
+        # update connections
+        if min_cost == np.inf:
+            new_node.cost = self.new_cost(p_node, new_node)
+            new_node.parent = p_node
+        else:
+            new_node.cost = min_cost
+            new_node.parent = best_node
+            
+        return new_node
+
+    def rewire(self, new_node, n_nodes, dist):
+        for node in n_nodes:
+            if new_node.euclidean_distance(node) > dist:
+                continue
+
+            if self.path_is_obstacle_free(new_node, node) and self.new_cost(new_node, node) < node.cost:
+                node.cost = self.new_cost(new_node, node)
+                node.parent = new_node
+
+    def near_nodes(self, node, max_radius, tree_nodes):
+        return[n for n in tree_nodes if self.path_is_obstacle_free(node, n) and node.euclidean_distance(n) <= max_radius]
+
+
     def plan(self, start, end, max_iterations, max_steering_radius, tolerance, sample_size=5):
         '''
             plans a path between start and end states
@@ -272,18 +310,19 @@ class NRRTPlanner:
             samples = self.uniform_sample(sample_size) if random.random() < self.alpha else self.non_uniform_sample(sample_size)
 
             for s_rand in samples:
-                s_nearest = self.find_closest_state(tree_nodes, s_rand)
-                s_new = self.steer_towards(s_nearest, s_rand, max_steering_radius)
-                num_collision_checks += 1
+                # select best parent
+                near_nodes = self.near_nodes(s_new, max_steering_radius * 2, tree_nodes)
+                s_new = self.choose_parent(s_new, near_nodes, s_nearest)
+                tree_nodes.add(s_new)
 
-                if self.path_is_obstacle_free(s_nearest, s_new):
-                    tree_nodes.add(s_new)
-                    s_nearest.children.append(s_new)
-                                    
-                    if s_new.euclidean_distance(end) < tolerance:
-                        end.parent = s_new
-                        plan, cost = self._follow_parent_pointers(end)
-                        break
+                # rewire tree in proximity of s_new
+                self.rewire(s_new, near_nodes, max_steering_radius // 4)
+                                
+                if s_new.euclidean_distance(end) < tolerance:
+                    end.parent = s_new
+                    plan, cost = self._follow_parent_pointers(end)
+                    break
+                    
             # ran out of samples - re sample
             else:
                 continue
