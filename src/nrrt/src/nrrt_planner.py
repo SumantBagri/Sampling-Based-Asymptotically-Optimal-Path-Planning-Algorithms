@@ -265,7 +265,8 @@ class NRRTPlanner:
 
         plan = [start]
         num_collision_checks = 0
-
+        cost = 0
+        
         for step in range(max_iterations):
             # alpha % chance of non uniform sampling, (1 - alpha) % chance of uniform sampling
             samples = self.uniform_sample(sample_size) if random.random() < self.alpha else self.non_uniform_sample(sample_size)
@@ -312,7 +313,7 @@ def simulation(planner, start, end, max_num_steps, max_steering_radius, batch_si
         start_time = time.time()
         plan, cost, num_iterations, num_collision_checks = planner.plan(start, end, max_num_steps, max_steering_radius, max_steering_radius, batch_size)
         end_time = time.time() - start_time                 
-    except Exception as e:
+    except AssertionError as e:
         print(repr(e)):
         cost = -1
         num_iterations = -1
