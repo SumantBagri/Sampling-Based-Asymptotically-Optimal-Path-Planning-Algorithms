@@ -44,8 +44,8 @@ class NRRTPlanner:
         self.model = model
         self.img_size = img_size
         self.dev = dev
-        self.alpha = 0.5
-        self.clearance = 1
+        self.alpha = alpha
+        self.clearance = clearance
     
     def state_is_free(self, state):
         '''
@@ -386,6 +386,7 @@ if __name__ == "__main__":
         for b_size in batch_sizes:
             for s, e in zip(start, end):
                 for i in range(5):    
+                    random.seed(seeds[i])
                     planner.update_start_goal_states(s, e)
                     cost, num_iterations, time, num_collision_checks = simulation(planner, s, e, max_iterations, max_steering_radius, b_size, max_check_div)
                     
