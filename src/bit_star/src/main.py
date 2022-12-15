@@ -132,7 +132,7 @@ def main(args):
         'Start Point': [f"({start_state.x}, {start_state.y})" for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Goal Point': [f"({dest_state.x}, {dest_state.y})" for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
         'Test Number': [test_num for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
-        'Iteration': [iter+1 for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],
+        'Iteration': [iter for iter in bit.current_iteration_arr],
         'Timestep': bit.current_time_ex_plotting_elapsed_arr,
         'Num Collision Checks': bit.num_collision_checks_arr,
         'Batch Size': [batch_size for iter in range(len(bit.current_time_ex_plotting_elapsed_arr))],

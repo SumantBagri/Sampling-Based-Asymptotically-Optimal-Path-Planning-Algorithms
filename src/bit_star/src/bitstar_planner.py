@@ -374,6 +374,7 @@ class BITPlanner:
         current_batch_size = batch_size[0]
 
         # Reset Evaluation Metric Collection
+        self.current_iteration_arr = []
         self.current_path_cost_arr = []
         self.any_path_found_arr = []
         self.prev_batch_size = 0
@@ -485,7 +486,7 @@ class BITPlanner:
 
                         plot_time_start = time.time()
                         # plot the new node and edge
-                        cv2.circle(img, (x_m.x, x_m.y), 2, (0, 0, 255), 2)
+                        cv2.circle(img, (x_m.x, x_m.y), 1, (0, 255, 0), 2)
                         cv2.line(img, (v_m.x, v_m.y),
                                  (x_m.x, x_m.y), (255, 0, 0))
                         self.total_plotting_time = self.total_plotting_time + (
@@ -506,18 +507,21 @@ class BITPlanner:
             self.total_plotting_time = self.total_plotting_time + \
                 (time.time() - plot_time_start)
 
-            self.current_path_cost_arr.append(dest_state.current_cost_to_come)
-            self.any_path_found_arr.append(
-                dest_state.current_cost_to_come != float("Inf"))
-            self.num_collision_checks_arr.append(self.num_collision_checks)
-            self.batch_size_arr.append(self.prev_batch_size)
-            self.cumulative_sampled_arr.append(self.cumulative_sampled)
+            if (step % 20 == 0) or (step == (max_num_steps-1)):
+                self.current_iteration_arr.append(step)
+                self.current_path_cost_arr.append(
+                    dest_state.current_cost_to_come)
+                self.any_path_found_arr.append(
+                    dest_state.current_cost_to_come != float("Inf"))
+                self.num_collision_checks_arr.append(self.num_collision_checks)
+                self.batch_size_arr.append(self.prev_batch_size)
+                self.cumulative_sampled_arr.append(self.cumulative_sampled)
 
-            self.current_time_elapsed_arr.append(time.time() - start_time)
-            self.time_tracker["TotalExPlotting"] = time.time(
-            ) - start_time - self.total_plotting_time
-            self.current_time_ex_plotting_elapsed_arr.append(
-                self.time_tracker["TotalExPlotting"])
+                self.current_time_elapsed_arr.append(time.time() - start_time)
+                self.time_tracker["TotalExPlotting"] = time.time(
+                ) - start_time - self.total_plotting_time
+                self.current_time_ex_plotting_elapsed_arr.append(
+                    self.time_tracker["TotalExPlotting"])
 
             # Perhaps make this less restrictive?
             if dest_state.current_cost_to_come == dest_state.euclidean_distance(start_state):
