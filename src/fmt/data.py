@@ -2,7 +2,7 @@ import csv
 import os
 import subprocess
 
-from fmt.utils import FileFormatError
+from utils import FileFormatError
 
 
 class CSVFormatError(FileFormatError):
