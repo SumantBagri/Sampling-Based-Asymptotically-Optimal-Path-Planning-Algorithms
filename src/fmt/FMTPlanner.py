@@ -212,7 +212,7 @@ class FMTPlanner:
                 cv2.imshow('image', img)
                 cv2.waitKey(1)
         
-        draw_plan(img, plan, map_idx, sidx, self.n, pidx, hw, bgr=(0,0,255), thickness=2, mode=mode)
+        draw_plan(img, plan, map_idx, sidx, self.n, pidx, hw, bgr=(0,0,255), thickness=2, mode=mode, showlive=showlive)
 
         return {
             'plan': plan,

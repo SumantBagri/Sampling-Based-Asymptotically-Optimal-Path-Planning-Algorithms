@@ -109,7 +109,8 @@ def evaluation():
                                                  pidx=run_num,
                                                  sidx=st_pair_num,
                                                  mode="evaluation",
-                                                 hw=hw)
+                                                 hw=hw,
+                                                 showlive=True)
                         data_dict["Iteration"] = plan_info['num_iters']
                         data_dict["Timestep"] = plan_info['total_execution_time']
                         data_dict["Num Collision Checks"] = plan_info['collision_checks']
