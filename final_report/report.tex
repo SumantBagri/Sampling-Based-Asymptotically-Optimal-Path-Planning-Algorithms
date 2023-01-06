@@ -13,6 +13,7 @@
 \DeclareMathOperator*{\argmin}{argmin}
 \newcommand*{\varfont}{\fontfamily{pcr}\selectfont}
 
+
 \title{A Comparative Study of Asymptotically-Optimal Sampling-Based Path Planning Methods}
 
 % The \author macro works with any number of authors. There are two
@@ -92,34 +93,70 @@ FMT* incorporates the advantages from both single and multiple query sampling-ba
 
 In the original implementation of FMT*, \citet{FMT} describe the algorithm as an outward growing tree in the cost-to-arrive space which performs a forward-dynamic programming recursion on a fixed sample size. Some of the key features of this algorithm are described below:
 \begin{itemize}
-	\item The sample count ($\mathcal{N}$) is fixed and the points are sampled from the free space ($\mathcal{X}_{free}$), beforehand, using a pre-determined distribution
-	\item The tree is built by considering a subset of sampled points ($\mathcal{M} \subset \mathcal{X}_{free}$) that are within the ball $B(\bar{x}, r_n) := \{ x \in \mathbb{R}^d: ||x - \bar{x}||_2 < r_n \}$  (i.e "disk-connected"), where $r_n$ is called the \textit{connection radius} and $\bar{x} \in \mathbb{R}^d$ is the query-point
+	\item The sample count ($\mathcal{N}$) is fixed and the points are sampled from the free space ($\mathcal{X}_{free}$), beforehand, using a pre-determined distribution. This is described by $\mathcal{M} \subset \mathcal{X}_{free}$
+	\item The tree is built by considering a subset of sampled points that are within the ball $B(\bar{x}, r_n) := \{ x \in \mathbb{R}^d: ||x - \bar{x}||_2 < r_n \}$  (i.e "disk-connected"), where $r_n$ is called the \textit{connection radius} and $\bar{x} \in \mathbb{R}^d$ is the query-point
 	\item The algorithm improves in computational complexity by considering a \textit{single}, locally optimal connection, with minimum cost-to-arrive, and adds the connection to the tree only if it is collision free. If it isnt, however, then the algorithm does not try to find another \textit{"valid"} point in $B(\bar{x}, r_n)$ and simply skips the current query point $\bar{x}$
 \end{itemize}
 
-The basic pseudocode of the FMT* algorithm, as described in \cite{FMT} is shown below:
+The basic pseudocode of the FMT* algorithm, as described in \cite{FMT} is described in Algorithm \ref{alg:fmt}
 
 \begin{algorithm}
 \caption{Fast Marching Tree Algorithm (FMT*): Basics}\label{alg:fmt}
 	\begin{algorithmic}[1]
 		\Require sample set $V$ comprising of $x_{init}$ and $n$ samples in $\mathcal{X}_{free}$, at least one of which is also $\mathcal{X}_{goal}$
-		\State Place $x_{init}$ in $V_{open}$
-		\State $X \gets x$
-		\State $N \gets n$
-		\While{$N \neq 0$}
-		\If{$N$ is even}
-			\State $X \gets X \times X$
-			\State $N \gets \frac{N}{2}$  \Comment{This is a comment}
-		\ElsIf{$N$ is odd}
-			\State $y \gets y \times X$
-			\State $N \gets N - 1$
-		\EndIf
-		\EndWhile
+		\State Place $x_{init}$ in $V_{open}$ and all other samples in $V_{unvisited}$; initialize tree with root node $x_{init}$
+		\State Find lowest-cost node $z$ in $V_{open}$
+		\State \quad For each of z's neighbors $x$ in $V_{unvisited}$:
+		\State \quad\quad Find neighbor nodes $y$ $V_{open}$
+		\State \quad\quad Find locally-optimal one-step connection to $x$ from among nodes $y$
+		\State \quad\quad If that connection is collision-free, add edge to tree of paths
+		\State \quad Remove successfully connected nodes $x$ from $V_{unvisited}$ and add them to $V_{open}$
+		\State \quad Remove $z$ from $V_{open}$ and add it to $V_{closed}$
+		\State \quad Repeat until either:
+		\State \quad\quad (1) $V_{open}$ is empty $\Rightarrow$ report failure
+		\State \quad\quad (2) Lowest-cost node $z$ in $V_{open}$ is in $\mathcal{X}_{goal} \Rightarrow$ return unique path to $z$ and
+		\State \quad\quad\quad report success
 	\end{algorithmic}
 \end{algorithm}
 
+Here, $V = \{x_{init}\} \bigcup \mathcal{M}$ and it is partitioned into three different sets: $V_{unvisited}$, $V_{open}$ and $V_{closed}$. $V_{unvisited}$ contains points that havent been explored yet. $V_{open}$ consists of query-points $\bar{x}$ whose cost-to-arrive from $x_{init}$ has been determined and are active for making new connections (i.e. tree-leaves). $V_{closed}$ consists of points which have been explored and are no-longer considered for new connections (i.e. parent nodes in the tree).
 
-The tree grows outwards from the source and performs "lazy" collision-checks which is where the algorithm trades convergence rate with optimality. It is however shown that as the number of sampling points increases ($N \to \infty$), the number of sub-optimal nodes in the path become vanishingly small ($ x_{subopt} \in Path(\mathcal{X}_{goal}, T = (V_{open} \bigcup V_{closed}, E)) \to 0 $). The performance benefits of FMT* are observed in higher dimensions (e.g. 6DoF Robotic Manipulators) where performing collision-checks is costly.
+The \textit{connection radius}, $r_n$, is computed as follows (\cite{FMT}),
+\begin{align}
+	r_n &= \gamma \left( \frac{\log(\mathcal{N})}{\mathcal{N}} \right)^{1/d} \notag \\
+	\text{where, } \gamma &> 2 \left( \frac{\mu(\mathcal{X}_{free})}{d \times \zeta_d} \right)^{1/d} \text{ and \textit{d} is the dimensionality} \notag
+\end{align}
+
+Here, $\mu(\mathcal{X}_{free})$ is the Lebesgue-measure of the free space and $\zeta_d$ is the volume of a unit-ball in d-dimensional Euclidean space
+
+In our implementation of FMT*, we have made two notable modifications
+\begin{itemize}
+	\item[]\textbf{First,} We have added euclidean-heuristics (with weight$=1.0$) to the computation for cost-to-arrive at node $x$ in $V_{unvisited}$ from $x_{init}$ via a node $y$ in $V_{open}$. This is defined, mathematically, below:
+	\begin{align}
+		c(x) = ||x - y||_2 + 1.0 \times \left( ||x - x_{goal}||_2 - ||y - x_{goal}|| \right) \notag
+	\end{align}
+	\item[]\textbf{Second,} We maintain the obstacle nodes as a KDTree for faster query when checking for collisions
+\end{itemize}
+
+We define the pseudocode for performing collision checks in FMT* in Algorithm. \ref{alg:cc}
+\begin{algorithm}
+\caption{Algorithm for Collision Checks}\label{alg:cc}
+	\begin{algorithmic}[1]
+	\Require obstacles stored as a KDTree. dCol defining the collision clearance
+	\State \textbf{Input: } start, target($\leftarrow \emptyset$) \Comment{check for collisions between start and target}
+	\State \textbf{Output: } \textit{bool} \Comment{True if collision-free, else false}
+	\Function{CollisionFree}{start, target}
+		\If{target$\leftarrow \emptyset$ or start = target}
+			\State \textbf{return} \Call{Near}{obstacles,start,1} $>$ dCol
+		\EndIf
+		\State $\overline{ts} \longleftarrow \frac{\overline{target} - \overline{start}}{||\overline{target} - \overline{start}||_2}$ \Comment{vector from start to target}
+		\State pts $\longleftarrow (\overline{start}, 0.1\times\overline{ts}, \cdots, \overline{target})$ \Comment{segmenting the connecting line}
+		\State \textbf{return} $\min$[\Call{Near}{obstacles,pts,1}] $>$ dCol
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+The performance benefits of FMT* are observed in higher dimensions (e.g. 6DoF Robotic Manipulators) where performing collision-checks is costly.
 
 \subsection{Batch Informed Trees}
 BIT* is a sampling based approach to path planning that utilizes the ordered nature of grid based approaches with the goal of creating a path planning algorithm that is both scalable and efficient. To do this, BIT* samples in batches and performs an ordered search on the batches ~\citep{BIT*}. In other words, the algorithm samples an entire batch randomly but uses a heuristic to determine which sample in the batch to process next ~\citep{BIT*}. Furthermore, similar to ~\citep{irrt}, once a sub-optimal solution is found, it reduces the region that is sampled to focus on the sub-problem that contains a better solution ~\citep{BIT*}. In this way, it maintains anytime resolution: finding a sub-optimal solution quickly, and using this sub-optimal solution to converge asymptotically towards the optimal solution ~\citep{BIT*}.
