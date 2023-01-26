@@ -1,0 +1,163 @@
+\documentclass{article}
+
+\usepackage{corl_2020} % Use this for the initial submission.
+\usepackage{amsmath, amssymb}
+%\usepackage[final]{corl_2020} % Uncomment for the camera-ready ``final'' version.
+%\usepackage[preprint]{corl_2020} % Uncomment for pre-prints (e.g., arxiv); This is like ``final'', but will remove the CORL footnote.
+
+\title{Formatting Instructions for CoRL 2020}
+
+% The \author macro works with any number of authors. There are two
+% commands used to separate the names and addresses of multiple
+% authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to
+% break the lines. Using \AND forces a line break at that point. So,
+% if LaTeX puts 3 of 4 authors names on the first line, and the last
+% on the second line, try using \AND instead of \And before the third
+% author name.
+
+% NOTE: authors will be visible only in the camera-ready and preprint versions (i.e., when using the option 'final' or 'preprint'). 
+% 	For the initial submission the authors will be anonymized.
+
+\author{
+  Jane E.~Doe\\
+  Department of Electrical Engineering and Computer Sciences\\
+  University of California Berkeley 
+  United States\\
+  \texttt{janedoe@berkeley.edu} \\
+  %% examples of more authors
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \AND
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+}
+
+
+\begin{document}
+\maketitle
+
+%===============================================================================
+
+\begin{abstract}
+    ABSTRACT PLACEHOLDER
+\end{abstract}
+
+% Two or three meaningful keywords should be added here
+\keywords{Sampling-based path planning, PLACEHOLDER FOR KEYWORD} 
+
+%===============================================================================
+
+\section{Introduction}
+    Path planning is a search problem where the goal is to find a sequence of actions that will lead to an obstacle-free optimal path from a start state to a target state \cite{pathplan}. Grid-based search algorithms have been proposed in the past \cite{astar} \cite{dstar} that guarantee finding optimal paths that exists. However, these techniques do not scale well to higher dimensional problems as they require discretization of the state space. On the other hand, sampling-based path planning algorithms \cite{rrt} \cite{prm} can solve high-dimensional path planning problems more efficiently, but often compute sub-optimal paths. Many attempts have been made to make improvements to sampling-based methods, using techniques such as heuristic guided searches \cite{irrt}, or the reduction of the sampling space \cite{astar-rrt}. The goal of this project is to implement three probabilistic sampling-based path planning algorithms, and compare their performances through simulations.
+%===============================================================================
+
+\section{Problem}
+\label{sec:Problem}
+
+    Path planning in continuous space is a difficult problem. On one hand, there are graph based approaches such as Dijkstra's algorithm, A*, etc. These approaches find the optimal solution, if one exists. In the case of A*, it uses a heuristic to find the optimal solution in fewer iterations. However, graph based approaches require discretization of continuous space. This is a problem for two reasons: First, a increasing the number of dimensions causes an explosion in the number of nodes. Second, increasing the resolution with finer discretization also causes a growth in the number of nodes. Having a high number of nodes creates a problem because the computational time of graph based approaches increases rapidly with the number of nodes.
+
+    On the other hand, there are sampling based approaches. They sample states from the continuous space, and create a tree, known as a Random Tree (RT). In Rapidly-exploring RT (RRT) algorithms, each new sampled state is added to the closest point on current tree. A more detailed description of the various sampling based approaches is presented in \ref{sec:Related Work}. However, while sampling rather than discretizing makes them more scalable, they do not have the ordered nature of graph based approaches for a more efficient search process.
+    
+    PLACEHOLDER FOR PROBLEM - DISCUSS MOTIVATION FOR USING ASYMPTOTICALLY OPTIMAL SAMPLING BASED PATH PLANNING (asymptotic optimality, probabilistic completeness)
+ %===============================================================================
+
+\section{Related Work}
+\label{sec:Related Work}
+    FOR EACH ALGORITHM, LIST TECHNIQUES/ALGORITHMS ITS BUILDING ON OR IMPROVING UPON AND GIVE BRIEF A EXPLANATION
+
+    RRT
+        - Create a tree of connected nodes by sampling a state from the continuous space and extending closest state on the existing tree towards the newly sampled state
+    RRT*
+        - Before each iteration of RRT, optimize the existing tree
+        - More optimal path
+        - Longer iterations
+    Informed RRT*
+        - Once a sub-optimal solution is found, reduces the continuous space from which states are being sampled to a space (an ellipse) that can improve the current solution, allowing for faster convergence to the optimal
+    FMT*
+        - Marching method to process single set of samples
+    Randomized A* (RA*) and Sampling based A* (SBA*)
+        - Sample near heuristically selected vertices of the graph
+        - Biases growth of the tree but requires methods avoid local minima
+        - Good for spaces with no obstacles, but not good for spaces with a lot of obstacles
+            - They address these problems but with trade-offs
+            - SBA* trade-off doesn’t seem bad, may be worth comparing?    
+    NRRT*
+        - RRT*, A*, Informed RRT*, A*-RRT*, Thtee*-RRT* (mention limitations due to scalability)
+        
+%===============================================================================
+
+\section{Proposed Method}
+\label{sec:Proposed Method}
+    - BRIEF DESCRIPTION OF EACH OF THE ALGORITHMS BEING IMPLEMENTED (INCLUDE ANY TECHNICAL/THEORETICAL DETAILS TO HIGHLIGHT CORE IDEAS, DO NOT GO INTO DETAILS)	
+
+In this project, we propose a comparison study of three asymptotically-optimal sampling-based path planning algorithms: Fast-marching trees (FMT*), batch informed trees (BIT*), and neural  rapidly random-exploring trees (NRRT*) \cite{nrrt}. The following section will briefly describe each of these algorithms.
+
+\subsection{Fast-Marching Trees}
+Sampling based algorithms can be divided into two categories: Single query (RRT* \cite{AOSA}) and Multiple query (PRM* \cite{AOSA}).  FMT* incorporates the advantages from both the categories in that it eliminates the greediness in RRT* by creating connections nearly optimally instead of trying to find the exactly optimal steering direction. However, in finding the optimal path, it grows a tree (as in the case of RRT*) instead of creating a bi-directional graph employed in the PRM* algorithm. The tree grows outwards from the source and performs "lazy" collision-checks which is where the algorithm trades convergence rate with optimality. It is however shown that as the number of sampling points increases ($N \ti \infty$), the number of suboptimal nodes in the path become vanishingly small ($ x_{subopt} \in \{ \mathcal{X}_{free}, x_{init}, \mathcal{X}_{goal}\} \to 0 $). The performance benefits of FMT* are observed in higher dimension (e.g. 6DoF Robotic Manipulators) where performing collision-checks is costly. One of the extensions of FMT* makes connections based on k-nearest neighbours \cite{FMT} which makes the algorithm more adaptive to different obstacle spaces. The other extension involves generating a heuristics to enable non-uniform sampling such that they are closer to the optimal path. One such way of generating non-uniform samples utilizes GANs to segment the input map into regions with varying priorities \cite{GAN}. The above extensions will be explored if time permits.
+
+\subsection{Bath Informed Trees}
+Uses batches of samples to perform an ordered search
+Sample randomly but use heuristic to determine which sample from the batch to process next
+Allows converging asymptotically towards the global optimum with anytime resolution (quickly find sub-optimal solution, then optimize it)
+Incorporate the new samples into the existing search
+Focus on the subproblem that contain a better solution
+
+\subsection{Neural RRT*}
+Neural RRT* is a non-uniform sampling-based path planning algorithm that aims to take advantage of the optimal path costs of the A* algorithm as well as the asymptotic optimality of the RRT* algorithm. Instead of sampling from the state space using just a uniform distribution, a non-uniform distribution learned by a convolutional neural network (CNN) trained on optimal paths generated from the A* algorithm is used to achieve non-uniform sampling. Unlike many of the RRT variant algorithms [CITATIONS PLACEHOLDER], the NRRT* algorithm does not depend on any human-designed heuristics to improve its performance. It also maintains the probabilistic completeness and the asymptotic optimality of the RRT* algorithm. Through simulations, it has been shown to perform superior compared to traditional algorithms such as RRT* and informed RRT* (IRRT*) [CITAION PLACEHOLDER].
+
+
+    
+
+ %===============================================================================
+
+\section{Proposed Evaluation}
+\label{sec:Proposed Evaluation}
+We will implement the individual algorithms in python as per the discussions and directives mentioned in the individual papers (\cite{FMT} FMT, \citep{nrrt} NRRT*,\textbackslash cite\{BIT* paper cite\} BIT*). In order to make direct comparisons between optimal paths returned by the different algorithms, we will run them on a common set of cluttered environments (these would include bug traps and a set of 2D maze). We will measure 2 metrics as part of running the simulation: Optimal Path Cost ($\mathcal{J}$) and Execution TIme ($\mathcal{T}$). ET is calculated based on the convergence criteria for each algorithm. We evaluate the cost ($\mathcal{J}$) as follows: For a grid having N nodes in the free space $\mathcal{X}_{free}$, let $\mathcal{P} \subset \mathcal{X}_{free}$ be the set of nodes along the optimal path as computed by the path planning algorithm $\{ \mathcal{X}_{free}, x_{init}, \mathcal{X}_{goal}\}$; Then the cost $\mathcal{J}$ is defined as,
+
+\begin{align}
+	\mathcal{J} = \sum_{i=1}^{N} \mathbb{I}[ x_i \in \mathcal{P}] \text{, where } x_i \text{ are the nodes in the free space.}
+\end{align}
+
+Since, NRRT* does not involve setting the sample size / iteration count, we will do an additional comparison of the variation of cost ($\mathcal{J}$) and ET ($\mathcal{T}$) with sample count for FMT* and BIT*. Comparison will be done for 10 different sample counts in the range $[1000,10000]$. In addition, we will also be comparing costs for obstacles in higher dimensions (5D - 7D) using simulations in OMPL(\textit{Open Motion Planning Library}) as the distinctive performance of FMT* can only be observed in higher dimensions. Finally, we will also provide a qualitative comparison of the optimal paths resulting from each algorithm for the same set of environments highlighting their behaviour around corners and near obstacles.
+
+
+%===============================================================================
+
+\section{Citations}
+\label{sec:citations}
+
+	Citations can be made using either \textbackslash citep\{\} or \textbackslash citet\{\}, depending from the appropriateness. To avoid the citation moving to the next line, it is often a good practice to replace the space before with a tilde (\~{}) character.
+	Example 1: ``CoRL is the best conference ever~\citep{Calandra2016}.''
+	Example 2: ``\citet{Calandra2016} proved, both theoretically and numerically, that CoRL is the best conference ever.''
+ 
+%===============================================================================
+
+% The maximum paper length is 8 pages excluding references and acknowledgements, and 10 pages including references and acknowledgements
+
+\clearpage
+% The acknowledgments are automatically included only in the final and preprint versions of the paper.
+\acknowledgments{If a paper is accepted, the final camera-ready version will (and probably should) include acknowledgments. All acknowledgments go at the end of the paper, including thanks to reviewers who gave useful comments, to colleagues who contributed to the ideas, and to funding agencies and corporate sponsors that provided financial support.}
+
+%===============================================================================
+
+% no \bibliographystyle is required, since the corl style is automatically used.
+\bibliography{proposal}  % .bib
+
+\end{document}
